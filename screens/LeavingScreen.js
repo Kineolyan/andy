@@ -1,9 +1,12 @@
 import React from 'react';
 import { ScrollView, StyleSheet, Text, Button } from 'react-native';
+import * as sms from 'expo-sms';
+
+const availability = sms.isAvailableAsync();
 
 export default function LeavingScreen() {
   const notifyHome = () => {
-    alert("Notification");
+    availability.then(a => alert(`SMS availability: ${a}`));
   };
 
   return (
