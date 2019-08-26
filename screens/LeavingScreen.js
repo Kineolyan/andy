@@ -2,6 +2,18 @@ import React, {useState, useEffect} from 'react';
 import { ScrollView, StyleSheet, Text, Button, Alert } from 'react-native';
 import * as sms from 'expo-sms';
 
+const LEAVING_MESSAGES = [
+  "Je pars du bureau. À tout à l'heure",
+  "Finito le buro. Zou traino",
+  "Départ du chouchou. Maison dans 57 minutes!",
+
+];
+
+function getRandomMessage(messages) {
+  const idx = Math.floor(Math.random() * Math.floor(messages.length));
+  return messages[idx];
+}
+
 async function notifyCo(message) {
   const { result } = await sms.sendSMSAsync(
     ['+33663053180'],
@@ -11,7 +23,8 @@ async function notifyCo(message) {
 }
 
 function notifyHome() {
-  return notifyCo("Je pars du bureau. À tout à l'heure");
+  return notifyCo(
+    getRandomMessage(LEAVING_MESSAGES));
 }
 
 function notifyProgress() {
@@ -30,12 +43,12 @@ async function sendSms(button, notifyFn, cbk) {
     const result = notifyFn();
     switch (result) {
     case 'cancelled':
-      return confirmSms('SMS cancelled');
+      return confirmSms('SMS annulé');
     case 'sent':
       return confirmSms('SMS envoyé');
     case 'unknown':
     default:
-      return confirmSms('Error when sending SMS');
+      return confirmSms('Erreur pendant l\'envoi SMS');
     }
   } finally {
     cbk(null);
