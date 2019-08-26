@@ -4,7 +4,7 @@ import * as sms from 'expo-sms';
 
 async function notifyCo(message) {
   const { result } = await sms.sendSMSAsync(
-    '+33663053180',
+    ['+33663053180'],
     message
   );
   return result;
@@ -26,16 +26,19 @@ function confirmSms(message) {
 
 async function sendSms(button, notifyFn, cbk) {
   cbk(button);
-  const result = notifyFn();
-  cbk(null);
-  switch (result) {
-  case 'cancelled':
-    return confirmSms('SMS cancelled');
-  case 'sent':
-    return confirmSms('SMS envoyé');
-  case 'unknown':
-  default:
-    return confirmSms('Error when sending SMS');
+  try {
+    const result = notifyFn();
+    switch (result) {
+    case 'cancelled':
+      return confirmSms('SMS cancelled');
+    case 'sent':
+      return confirmSms('SMS envoyé');
+    case 'unknown':
+    default:
+      return confirmSms('Error when sending SMS');
+    }
+  } finally {
+    cbk(null);
   }
 }
 
