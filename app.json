@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Andy",
-    "slug": "andy",
+    "name": "Summer",
+    "slug": "summer",
     "privacy": "public",
     "sdkVersion": "33.0.0",
     "platforms": [
@@ -15,7 +15,7 @@
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#00101d"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
