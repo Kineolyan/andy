@@ -103,7 +103,7 @@ export default function LeavingScreen() {
 }
 
 LeavingScreen.navigationOptions = {
-  title: 'Leaving the office',
+  title: 'Retour vers la Maison!',
 };
 
 const styles = StyleSheet.create({

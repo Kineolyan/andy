@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import {
   ScrollView,
   View,
@@ -25,24 +25,21 @@ async function watchEpisode(serie, setSeries) {
 function SerieView({serie, setSeries}) {
   return (
     <View key={serie.name}>
-      <Text>{serie.name}</Text>
-      <Text>{serie.episodeIdx} / {serie.lastEpisodeIdx}</Text>
+      <Text style={styles.nameText}>
+        {serie.name}
+      </Text>
+      <Text style={styles.episodeText}>
+        {serie.episodeIdx} / {serie.lastEpisodeIdx}
+      </Text>
       <Button
           onPress={() => watchEpisode(serie, setSeries)}
           title="Marquer comme vu"
-          color="#841584" />
+          color="#fcbe76" />
     </View>)
-}
-
-function test() {
-  alert('coucou');
 }
 
 export default function TvScreen() {
   const [series, setSeries] = useState(null);
-  // useEffect(() => {
-  //   loadSeries(setSeries);
-  // });
 
   let content;
   if (series === null) {
@@ -72,7 +69,7 @@ export default function TvScreen() {
 }
 
 TvScreen.navigationOptions = {
-  title: 'Find which show to look at',
+  title: 'On regarde quoi ce soir ?',
 };
 
 const styles = StyleSheet.create({
@@ -81,11 +78,9 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingLeft: 5,
     paddingRight: 5,
-    paddingTop: 15,
-  },
-  contentContainer: {
     paddingTop: 10,
   },
+  contentContainer: {},
   refreshContainer: {
     position: 'absolute',
     bottom: 0,
@@ -105,5 +100,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fbfbfb',
     paddingVertical: 10,
+  },
+  nameText: {
+    fontWeight: '600',
+    fontSize: 18,
+    paddingTop: 5,
+  },
+  episodeText: {
+    color: '#a39f9f',
+    fontSize: 13,
+    backgroundColor: 'transparent',
   },
 });
