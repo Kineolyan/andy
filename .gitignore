@@ -10,3 +10,6 @@ web-build/
 web-report/
 
 .expo-shared/
+
+## Secrets
+.secret/

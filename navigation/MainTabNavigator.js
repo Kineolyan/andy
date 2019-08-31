@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LeavingScreen from '../screens/LeavingScreen';
+import TvScreen from '../screens/TvScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -60,13 +61,27 @@ const LeavingOfficeStack = createStackNavigator(
 LeavingOfficeStack.navigationOptions = {
   tabBarLabel: 'Leaving',
   tabBarIcon: ({focused}) => (
-    <TabBarIcon focused={focused} name={Platform.IO === 'ios' ? 'ios-link' : 'md-link'} />
+    <TabBarIcon focused={focused} name={Platform.IO === 'ios' ? 'ios-train' : 'md-train'} />
+  )
+};
+
+const TvStack = createStackNavigator(
+  {
+    TV: TvScreen
+  },
+  config);
+
+TvStack.navigationOptions = {
+  tabBarLabel: 'TV Shows',
+  tabBarIcon: ({focused}) => (
+    <TabBarIcon focused={focused} name={Platform.IO === 'ios' ? 'ios-tv' : 'md-tv'} />
   )
 };
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LeavingOfficeStack,
+  TvStack,
   SettingsStack,
 });
 
