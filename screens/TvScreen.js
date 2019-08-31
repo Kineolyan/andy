@@ -11,30 +11,47 @@ import {
 import tvList from '../apis/tv-list';
 
 async function loadSeries(setSeries) {
+  setSeries(null);
   const series = await tvList.readSeries();
   setSeries(series);
 }
 
-function SerieView(serie) {
+async function watchEpisode(serie, setSeries) {
+  alert(`watched ${serie.name}`);
+  // setSeries(null);
+  // await tvList.recordWatchedEpisode(serie);
+  // return loadSeries(setSeries);
+}
+
+function SerieView({serie, setSeries}) {
   return (
     <View key={serie.name}>
       <Text>{serie.name}</Text>
       <Text>{serie.episodeIdx} / {serie.lastEpisodeIdx}</Text>
+      <Button
+          onPress={test}
+          title="Marquer comme vu"
+          color="#841584" />
     </View>)
 }
 
+function test() {
+  alert('coucou');
+}
+
 export default function TvScreen() {
-  const [series, setSeries] = useState([]);
+  const [series, setSeries] = useState(null);
   useEffect(() => {
     loadSeries(setSeries);
   });
 
   let content;
-  if (series.length === 0) {
-    content = (
-      <Text>No series to watch :(</Text>);
+  if (series === null) {
+    content = <Text>Loading...</Text>;
+  } else if (series.length === 0) {
+    content = <Text>No series to watch :(</Text>;
   } else {
-    const entries = series.map(SerieView);
+    const entries = series.map(serie => SerieView({serie, setSeries}));
     content = (
       <ScrollView
         style={styles.container}
@@ -47,7 +64,7 @@ export default function TvScreen() {
       {content}
       <View style={styles.refreshContainer}>
         <Button
-          onPress={() => loadSeries(setSeries)}
+          onPress={test}
           title="Rafraîchir la list"
           color="#841584" />
       </View>

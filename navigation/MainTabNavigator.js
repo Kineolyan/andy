@@ -34,7 +34,7 @@ HomeStack.navigationOptions = {
   ),
 };
 
-HomeStack.path = '';
+HomeStack.path = 'home';
 
 const SettingsStack = createStackNavigator(
   {
@@ -50,7 +50,7 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-SettingsStack.path = '';
+SettingsStack.path = 'settings';
 
 const LeavingOfficeStack = createStackNavigator(
   {
@@ -65,6 +65,8 @@ LeavingOfficeStack.navigationOptions = {
   )
 };
 
+LeavingOfficeStack.path = 'leaving';
+
 const TvStack = createStackNavigator(
   {
     TV: TvScreen
@@ -77,6 +79,8 @@ TvStack.navigationOptions = {
     <TabBarIcon focused={focused} name={Platform.IO === 'ios' ? 'ios-tv' : 'md-tv'} />
   )
 };
+
+TvStack.path = 'tv';
 
 const tabNavigator = createBottomTabNavigator({
   HomeStack,

@@ -1,4 +1,5 @@
 // @ts-check
+import _ from 'lodash';
 
 // const SHEET_ID = '1RtpgoMpHfqunNL92-0gVN2dA3OKZTpRikcUQz6uAxX8';
 // const FIRST_ROW = 3;
@@ -62,24 +63,35 @@
 // 	},
 // 	{});
 
-function readSeries() {
-	return Promise.resolve([
-		{
-			name: 'Lucifer',
-			episodeIdx: 4,
-			lastEpisodeIdx: 21,
-			row: 3
-		},
-		{
-			name: 'Stranger Things',
-			episodeIdx: 4,
-			lastEpisodeIdx: 8,
-			row: 4
-		}
-	]);
+let serverState = [
+	{
+		name: 'Lucifer',
+		episodeIdx: 4,
+		lastEpisodeIdx: 21,
+		row: 3,
+		timestamp: 2
+	},
+	{
+		name: 'Stranger Things',
+		episodeIdx: 4,
+		lastEpisodeIdx: 8,
+		row: 4,
+		timestamp: 1
+	}
+];
+const fakeFetch = () => Promise.resolve(serverState);
+
+async function readSeries() {
+	const series = await fakeFetch();
+	return _(series)
+		.sortBy(serie => serie.timestamp)
+		.value();
 }
 
-function recordWatchedEpisode(episode) {
+function recordWatchedEpisode(watchedSerie) {
+	const serieState = serverState.find(serie => serie.row === watchedSerie.row);
+	serieState.episodeIdx = watchedSerie.episodeIdx + 1;
+
 	return Promise.resolve();
 }
 
