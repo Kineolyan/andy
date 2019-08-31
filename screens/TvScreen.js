@@ -17,10 +17,9 @@ async function loadSeries(setSeries) {
 }
 
 async function watchEpisode(serie, setSeries) {
-  alert(`watched ${serie.name}`);
-  // setSeries(null);
-  // await tvList.recordWatchedEpisode(serie);
-  // return loadSeries(setSeries);
+  setSeries(null);
+  await tvList.recordWatchedEpisode(serie);
+  return loadSeries(setSeries);
 }
 
 function SerieView({serie, setSeries}) {
@@ -29,7 +28,7 @@ function SerieView({serie, setSeries}) {
       <Text>{serie.name}</Text>
       <Text>{serie.episodeIdx} / {serie.lastEpisodeIdx}</Text>
       <Button
-          onPress={test}
+          onPress={() => watchEpisode(serie, setSeries)}
           title="Marquer comme vu"
           color="#841584" />
     </View>)
@@ -41,9 +40,9 @@ function test() {
 
 export default function TvScreen() {
   const [series, setSeries] = useState(null);
-  useEffect(() => {
-    loadSeries(setSeries);
-  });
+  // useEffect(() => {
+  //   loadSeries(setSeries);
+  // });
 
   let content;
   if (series === null) {
@@ -59,12 +58,13 @@ export default function TvScreen() {
         {entries}
       </ScrollView>);
   }
+
   return (
     <View style={styles.container}>
       {content}
       <View style={styles.refreshContainer}>
         <Button
-          onPress={test}
+          onPress={() => loadSeries(setSeries)}
           title="Rafraîchir la list"
           color="#841584" />
       </View>

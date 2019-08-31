@@ -91,6 +91,7 @@ async function readSeries() {
 function recordWatchedEpisode(watchedSerie) {
 	const serieState = serverState.find(serie => serie.row === watchedSerie.row);
 	serieState.episodeIdx = watchedSerie.episodeIdx + 1;
+	serieState.timestamp = Date.now();
 
 	return Promise.resolve();
 }
