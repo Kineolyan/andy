@@ -1,99 +1,57 @@
 // @ts-check
 import _ from 'lodash';
 
-// const SHEET_ID = '1RtpgoMpHfqunNL92-0gVN2dA3OKZTpRikcUQz6uAxX8';
-// const FIRST_ROW = 3;
-// const RANGES  = `Notes!H${FIRST_ROW}:K${FIRST_ROW + 100}`;
-
-// function formatSeries(data) {
-// 	console.log('Data', data);
-// 	return [1];
-// }
-// function readSeries(api) {
-// 	return new Promise((resolve, reject) => {
-// 		api.spreadsheets.values.get(
-// 			{
-// 				spreadsheetId: SHEET_ID,
-// 				RANGES,
-// 			},
-// 			(err, res) => {
-// 				if (err) {
-// 					console.error('The API returned an error: ' + err);
-// 					reject(err);
-// 				} else {
-// 					const rows = res.data.values;
-// 					const result = formatSeries(rows);
-// 					resolve(result);
-// 				}
-// 			});
-// 	});
-// }
-
-// function recordWatchedEpisode(api, serie) {
-// 	const range = `Notes!J${serie.row}:J${serie.row}`;
-// 	const values = [serie.episodeIdx + 1];
-// 	const payload = {
-// 		spreadsheetId: SHEET_ID,
-// 		range,
-// 		valueInputOption: 'RAW',
-// 		resource: {
-// 			"range": range,
-// 			"values": [values]
-// 		}
-// 	};
-// 	return new Promise((resolve, reject) => {
-// 		api.spreadsheets.values.update(
-// 			payload,
-// 			(err) => {
-// 				if (err) {
-// 					console.error('Cannot write data ' + err);
-// 					reject(err);
-// 				} else {
-// 					console.log('Write successful!');
-// 					resolve();
-// 				}
-// 			});
-// 	});
-// }
-
-// const api = [readSeries, recordWatchedEpisode].reduce(
-// 	(result, f) => {
-// 		result[f.name] = withApi(f);
-// 		return result;
-// 	},
-// 	{});
-
+const API_URL = 'https://6hvkj4u44j.execute-api.eu-west-3.amazonaws.com/prod';
 let serverState = [
 	{
 		name: 'Lucifer',
 		episodeIdx: 4,
 		lastEpisodeIdx: 21,
-		row: 3,
+		id: 0,
 		timestamp: 2
 	},
 	{
 		name: 'Stranger Things',
 		episodeIdx: 4,
 		lastEpisodeIdx: 8,
-		row: 4,
+		id: 1,
 		timestamp: 1
 	}
 ];
 const fakeFetch = () => Promise.resolve(serverState);
 
 async function readSeries() {
-	const series = await fakeFetch();
+	const series = await fetch(
+		`${API_URL}/series`,
+		{
+			method: 'GET',
+			mode: 'cors',
+			cache: 'no-cache',
+			headers: {},
+			redirect: 'follow',
+			referrer: 'no-referrer',
+		})
+		.then(response => response.json());
 	return _(series)
 		.sortBy(serie => serie.timestamp)
 		.value();
 }
 
-function recordWatchedEpisode(watchedSerie) {
-	const serieState = serverState.find(serie => serie.row === watchedSerie.row);
-	serieState.episodeIdx = watchedSerie.episodeIdx + 1;
-	serieState.timestamp = Date.now();
-
-	return Promise.resolve();
+async function recordWatchedEpisode(watchedSerie) {
+	const response = await fetch(
+		`${API_URL}/series/${watchedSerie.id}/episode?secret=username`,
+		{
+			method: 'PUT',
+			mode: 'cors',
+			cache: 'no-cache',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			redirect: 'follow',
+			referrer: 'no-referrer',
+			body: JSON.stringify(watchedSerie.episodeIdx),
+		});
+	return undefined;
 }
 
 module.exports = {

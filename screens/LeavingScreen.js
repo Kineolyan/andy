@@ -6,7 +6,6 @@ const LEAVING_MESSAGES = [
   "Je pars du bureau. À tout à l'heure",
   "Finito le buro. Zou traino",
   "Départ du chouchou. Maison dans 57 minutes!",
-
 ];
 
 function getRandomMessage(messages) {
