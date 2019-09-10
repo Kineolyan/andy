@@ -1,11 +1,23 @@
 import React, {useState, useEffect} from 'react';
-import { ScrollView, StyleSheet, Text, Button, Alert } from 'react-native';
+import {
+  View,
+  ScrollView,
+  StyleSheet,
+  Text,
+  Button,
+  Alert
+} from 'react-native';
 import * as sms from 'expo-sms';
 
 const LEAVING_MESSAGES = [
   "Je pars du bureau. À tout à l'heure",
   "Finito le buro. Zou traino",
   "Départ du chouchou. Maison dans 57 minutes!",
+];
+const EXIT_STATION_MESSAGES = [
+  "Je quitte la Défense. Papa is coming",
+  "Mon train vient de sortir de la Défense",
+  "C'est bon, je quitte la Défense"
 ];
 
 function getRandomMessage(messages) {
@@ -27,7 +39,12 @@ function notifyHome() {
 }
 
 function notifyProgress() {
-  return notifyCo('Je suis à la gare. Prochain train dans ');
+  return notifyCo('Je suis à la Défense. Prochain train dans ');
+}
+
+function notifyStationExit() {
+  return notifyCo(
+    getRandomMessage(EXIT_STATION_MESSAGES));
 }
 
 function confirmSms(message) {
@@ -56,6 +73,7 @@ async function sendSms(button, notifyFn, cbk) {
 
 const OFFICE_BUTTON = 'office';
 const STATION_BUTTON = 'station';
+const EXIT_BUTTON = 'exit-station';
 
 export default function LeavingScreen() {
   const [availability, setAvailability] = useState(null);
@@ -76,6 +94,9 @@ export default function LeavingScreen() {
       },
       [STATION_BUTTON]: {
         disabled: false
+      },
+      [EXIT_BUTTON]: {
+        disabled: false
       }
     };
     if (sendingSms !== null) {
@@ -85,18 +106,34 @@ export default function LeavingScreen() {
     return (
       <ScrollView style={styles.container}>
         <Text>Olivier, it's time to leave</Text>
-        <Button
-          onPress={() => sendSms(OFFICE_BUTTON, notifyHome, setSmsInProgress)}
-          title="Notify Home <3"
-          color="#841584"
-          accessibilityLabel="Send a SMS notification from the office"
-        />
-        <Button
-          onPress={() => sendSms(STATION_BUTTON, notifyProgress, setSmsInProgress)}
-          title="Notify progress"
-          color="#0c0c0c"
-          accessibilityLabel="Send a SMS notification from the station"
-        />
+        <View style={styles.buttonGroup}>
+          <Button
+            style={styles.smsButton}
+            onPress={() => sendSms(OFFICE_BUTTON, notifyHome, setSmsInProgress)}
+            title="Je pars <3"
+            color="#834bfc"
+            accessibilityLabel="Send a SMS notification from the office"
+            {...buttonStyles[OFFICE_BUTTON]}
+          />
+        </View>
+        <View style={styles.buttonGroup}>
+          <Button
+            style={styles.smsButton}
+            onPress={() => sendSms(STATION_BUTTON, notifyProgress, setSmsInProgress)}
+            title="J'attends à la gare"
+            color="#ed8c04"
+            accessibilityLabel="Send a SMS notification from the station"
+            {...buttonStyles[STATION_BUTTON]}
+          />
+          <Button
+            style={styles.smsButton}
+            onPress={() => sendSms(EXIT_BUTTON, notifyStationExit, setSmsInProgress)}
+            title="Le train part de la Défense"
+            color="#ed8c04"
+            accessibilityLabel="Send a SMS notification from the station"
+            {...buttonStyles[EXIT_BUTTON]}
+          />
+        </View>
       </ScrollView>);
   }
 }
@@ -113,4 +150,11 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     paddingTop: 15,
   },
+  buttonGroup: {
+    paddingTop: 10
+  },
+  smsButton: {
+    marginBottom: 2,
+    color: 'black'
+  }
 });
