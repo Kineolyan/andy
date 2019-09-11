@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import LeavingScreen from '../screens/LeavingScreen';
 import TvScreen from '../screens/TvScreen';
+import CatScreen from '../screens/CatScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -82,10 +83,26 @@ TvStack.navigationOptions = {
 
 TvStack.path = 'tv';
 
+const CatStack = createStackNavigator(
+  {
+    Cat: CatScreen
+  },
+  config);
+
+CatStack.navigationOptions = {
+  tabBarLabel: 'M. Chat',
+  tabBarIcon: ({focused}) => (
+    <TabBarIcon focused={focused} name="logo-octocat" />
+  )
+};
+
+CatStack.path = 'cat';
+
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LeavingOfficeStack,
   TvStack,
+  CatStack,
   SettingsStack,
 });
 
