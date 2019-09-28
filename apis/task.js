@@ -15,10 +15,10 @@ function fetchOptions(method) {
 }
 
 async function readTasks() {
-	const series = await fetch(API_URL, fetchOptions('GET'))
+	const tasks = await fetch(API_URL, fetchOptions('GET'))
 		.then(response => response.json());
-	return _(series)
-		.sortBy(serie => serie.timestamp)
+	return _(tasks)
+		.sortBy(task => task.daysToTarget)
 		.value();
 }
 
@@ -37,9 +37,21 @@ function cleanCat() {
 	return executeTask({id: 'cat'});
 }
 
+const FREQUENCY_PATTERN = /^(\d+)\s*([a-z]+)$/;
+function parseFrequency(frequency) {
+	const match = FREQUENCY_PATTERN.exec(frequency);
+	return match === null
+		? null
+		: {
+			duration: parseInt(match[1], 10),
+			unit: match[2]
+		};
+}
+
 export {
 	readTasks,
 	executeTask,
 	readCatTask,
-	cleanCat
+	cleanCat,
+	parseFrequency
 };
