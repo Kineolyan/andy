@@ -2,6 +2,7 @@
 import _ from 'lodash';
 
 const API_URL = 'https://6hvkj4u44j.execute-api.eu-west-3.amazonaws.com/prod';
+/**
 let serverState = [
 	{
 		name: 'Lucifer',
@@ -19,6 +20,7 @@ let serverState = [
 	}
 ];
 const fakeFetch = () => Promise.resolve(serverState);
+//*/
 
 async function readSeries() {
 	const series = await fetch(
