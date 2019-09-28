@@ -64,7 +64,7 @@ async function sendSms(button, notifyFn, cbk) {
       return confirmSms('SMS envoyé');
     case 'unknown':
     default:
-      return confirmSms('Erreur pendant l\'envoi SMS');
+      break; // Do nothing, as we don't really know what happened
     }
   } finally {
     cbk(null);
