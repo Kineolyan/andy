@@ -2,7 +2,7 @@
   "expo": {
     "name": "Summer",
     "slug": "summer",
-    "privacy": "public",
+    "privacy": "unlisted",
     "sdkVersion": "33.0.0",
     "platforms": [
       "ios",
