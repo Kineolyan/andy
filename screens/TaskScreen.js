@@ -129,7 +129,9 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     paddingTop: 10,
   },
-  contentContainer: {},
+  contentContainer: {
+    paddingBottom: 70
+  },
   refreshContainer: {
     position: 'absolute',
     bottom: 0,
