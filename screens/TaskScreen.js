@@ -38,7 +38,7 @@ function getButtonStyle({daysToTarget}) {
 
 function getDueDate({dueDate}) {
   const d = new Date(dueDate);
-  return `${d.getDay()}/${d.getMonth() + 1}/${d.getFullYear()}`;
+  return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
 }
 
 function getHumanUnit(unit) {
@@ -63,7 +63,7 @@ function TaskView({task, markDone}) {
     ? `${task.daysToTarget} jours restant`
     : `Dépassé de ${-task.daysToTarget} jours`;
 
-  return (      
+  return (
     <View key={task.name}>
       <TouchableOpacity
           style={buttonStyle}
@@ -129,7 +129,9 @@ const styles = StyleSheet.create({
     paddingRight: 5,
     paddingTop: 10,
   },
-  contentContainer: {},
+  contentContainer: {
+    paddingBottom: 70
+  },
   refreshContainer: {
     position: 'absolute',
     bottom: 0,
