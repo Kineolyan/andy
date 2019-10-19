@@ -90,14 +90,29 @@ TaskStack.navigationOptions = {
 
 TaskStack.path = 'tasks';
 
-const tabNavigator = createBottomTabNavigator({
-  LeavingOfficeStack,
-  TvStack,
-  CatStack,
-  TaskStack,
-  SettingsStack,
-});
+const navigatorConfigs = {
+  full: {
+    LeavingOfficeStack,
+    TvStack,
+    CatStack,
+    TaskStack,
+    SettingsStack,
+  },
+  colombe: {
+    TaskStack,
+    CatStack,
+    TvStack,
+  }
+};
 
-tabNavigator.path = '';
+const navigators = {};
+for (const key in navigatorConfigs) {
+  const navigator = createBottomTabNavigator(navigatorConfigs[key]);
+  navigator.path = '';
+  navigators[key] = navigator;
+}
 
-export default tabNavigator;
+export default navigators.colombe;
+export {
+  navigators
+}
