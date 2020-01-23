@@ -1,6 +1,7 @@
 
 import { AsyncStorage } from 'react-native';
 
+const profileKey = "userProfile";
 const defaultProfile = "colombe";
 let state = {
 	version: 1
@@ -13,6 +14,7 @@ const get = () => state.id ? {...state} : undefined;
 
 const set = (id) => {
 	state.id = id;
+	AsyncStorage.setItem(profileKey, JSON.stringify(state));
 
 	// Notification loop
 	const visibleState = get();
@@ -20,14 +22,15 @@ const set = (id) => {
 };
 
 const init = async () => {
+	const keys = await AsyncStorage.getAllKeys();
+
 	if (!state.id) {
-		const data = await AsyncStorage.getItem("userProfile");
+		const data = await AsyncStorage.getItem(profileKey);
     if (!data) {
 			await AsyncStorage.setItem(
-				"userProfile",
+				profileKey,
 				JSON.stringify({...state, id: defaultProfile}));
 			state.id = defaultProfile;
-		} else {
 			// Merge it with empty state
 			state = JSON.parse(data);
 		}
