@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
+  Button,
   Picker,
   StyleSheet,
   Switch,
@@ -8,7 +9,11 @@ import {
 } from 'react-native';
 import { ExpoConfigView } from '@expo/samples';
 
-import {initHook as initProfile, set as changeProfile} from '../services/profile';
+import {
+  initHook as initProfile,
+  set as changeProfile,
+  clear as clearProfile
+} from '../services/profile';
 
 const switchToAdvancedNasty = (setAdvanced, value) => {
   setAdvanced(value);
@@ -17,7 +22,11 @@ const switchToAdvancedNasty = (setAdvanced, value) => {
       () => setAdvanced(false),
       1000 * 15);
   }
-}
+};
+
+const clearAll = () => {
+  clearProfile();
+};
 
 export default function SettingsScreen() {
   const [profile, setProfile] = useState(undefined);
@@ -43,6 +52,11 @@ export default function SettingsScreen() {
             value={advanced}
             onValueChange={value => switchToAdvancedNasty(setAdvanced, value)}/>
         </View>
+        <Button
+            onPress={() => clearAll()}
+            title="Nettoyer la DB"
+            color="#834bfc"
+            accessibilityLabel="Clear DB" />
       </View>
     );
   } else {
