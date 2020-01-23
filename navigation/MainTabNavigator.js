@@ -91,17 +91,16 @@ TaskStack.navigationOptions = {
 TaskStack.path = 'tasks';
 
 const navigatorConfigs = {
-  full: {
+  olivier: {
     LeavingOfficeStack,
     TvStack,
-    CatStack,
     TaskStack,
     SettingsStack,
   },
   colombe: {
     TaskStack,
-    CatStack,
     TvStack,
+    SettingsStack,
   }
 };
 
