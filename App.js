@@ -1,16 +1,39 @@
 import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
-import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import AppNavigator from './navigation/AppNavigator';
+import createAppNavigator from './navigation/AppNavigator';
+import {initHook as initProfile} from './services/profile';
+
+const appsPerProfile = new Map();
+const NoApp = () => {
+  return <Text>Oops. Something has not loaded</Text>;
+};
 
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const [userProfile, setProfile] = useState(undefined);
 
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
+  useEffect( // Connect the the storage
+    () => initProfile(profile => {
+      if (profile) {
+        const profileId = profile.id;
+        if (!appsPerProfile.has(profileId)) {
+          appsPerProfile.set(
+            profileId,
+            createAppNavigator(profileId));
+        }
+        setProfile(profileId);
+      } else {
+        setProfile(null);
+      }
+    }),
+    []);
+
+  if (!props.skipLoadingScreen && (!isLoadingComplete || userProfile == undefined)) {
     return (
       <AppLoading
         startAsync={loadResourcesAsync}
@@ -19,10 +42,11 @@ export default function App(props) {
       />
     );
   } else {
+    const App = appsPerProfile.get(userProfile) || NoApp;
     return (
       <View style={styles.container}>
         {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
+        <App/>
       </View>
     );
   }
