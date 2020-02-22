@@ -100,7 +100,7 @@ const MealStack = createStackNavigator(
 MealStack.navigationOptions = {
   tabBarLabel: 'Repas',
   tabBarIcon: ({focused}) => (
-    <TabBarIcon focused={focused} name="ios-apps" />
+    <TabBarIcon focused={focused} name="md-videocam" />
   )
 };
 
