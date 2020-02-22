@@ -33,6 +33,7 @@ export default function App(props) {
     }),
     []);
 
+  console.debug(`state: userProfile=${userProfile}`);
   if (!props.skipLoadingScreen && (!isLoadingComplete || userProfile == undefined)) {
     return (
       <AppLoading

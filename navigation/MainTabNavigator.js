@@ -8,6 +8,7 @@ import LeavingScreen from '../screens/LeavingScreen';
 import TvScreen from '../screens/TvScreen';
 import CatScreen from '../screens/CatScreen';
 import TaskScreen from '../screens/TaskScreen';
+import MealScreen from '../screens/MealScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -90,15 +91,32 @@ TaskStack.navigationOptions = {
 
 TaskStack.path = 'tasks';
 
+const MealStack = createStackNavigator(
+  {
+    Cat: MealScreen
+  },
+  config);
+
+MealStack.navigationOptions = {
+  tabBarLabel: 'Repas',
+  tabBarIcon: ({focused}) => (
+    <TabBarIcon focused={focused} name="ios-apps" />
+  )
+};
+
+MealStack.path = 'meals';
+
 const navigatorConfigs = {
   olivier: {
     LeavingOfficeStack,
     TvStack,
     TaskStack,
+    MealStack,
     SettingsStack,
   },
   colombe: {
     TaskStack,
+    MealStack,
     TvStack,
     SettingsStack,
   }

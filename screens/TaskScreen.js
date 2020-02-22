@@ -106,7 +106,7 @@ export default function TaskScreen() {
       <View style={styles.refreshContainer}>
         <Button
           onPress={() => listTasks(setTasks, markLoading)}
-          title="Rafraîchir la list"
+          title="Rafraîchir la liste"
           color="#841584" />
       </View>
     </View>
