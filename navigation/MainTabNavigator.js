@@ -1,25 +1,31 @@
 import React from 'react';
 import { Platform } from 'react-native';
-import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import TabBarIcon from '../components/TabBarIcon';
 import SettingsScreen from '../screens/SettingsScreen';
 import LeavingScreen from '../screens/LeavingScreen';
 import TvScreen from '../screens/TvScreen';
-import CatScreen from '../screens/CatScreen';
 import TaskScreen from '../screens/TaskScreen';
 
+// FIXME how to use this
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
 
-const SettingsStack = createStackNavigator(
-  {
-    Settings: SettingsScreen,
-  },
-  config
-);
+const SettingsStack = (() => {
+  const Stack = createStackNavigator();
+
+  return () => (
+    <Stack.Navigator
+        initialRouteName="settings"
+        headerMode="screen">
+      <Stack.Screen name="settings" component={SettingsScreen} />
+    </Stack.Navigator>
+  );
+})();
 
 SettingsStack.navigationOptions = {
   tabBarLabel: 'Settings',
@@ -28,14 +34,7 @@ SettingsStack.navigationOptions = {
   ),
 };
 
-SettingsStack.path = 'settings';
-
-const LeavingOfficeStack = createStackNavigator(
-  {
-    Leaving: LeavingScreen
-  },
-  config);
-
+const LeavingOfficeStack = () => <LeavingScreen />;
 LeavingOfficeStack.navigationOptions = {
   tabBarLabel: 'Leaving',
   tabBarIcon: ({focused}) => (
@@ -43,13 +42,16 @@ LeavingOfficeStack.navigationOptions = {
   )
 };
 
-LeavingOfficeStack.path = 'leaving';
+const TvStack = (() => {
+  const Stack = createStackNavigator();
 
-const TvStack = createStackNavigator(
-  {
-    TV: TvScreen
-  },
-  config);
+  return () => (
+    <Stack.Navigator initialRouteName="tv"
+        headerMode="screen">
+      <Stack.Screen name="tv" component={TvScreen} />
+    </Stack.Navigator>
+  );
+})();
 
 TvStack.navigationOptions = {
   tabBarLabel: 'TV Shows',
@@ -58,28 +60,16 @@ TvStack.navigationOptions = {
   )
 };
 
-TvStack.path = 'tv';
-
-const CatStack = createStackNavigator(
-  {
-    Cat: CatScreen
-  },
-  config);
-
-CatStack.navigationOptions = {
-  tabBarLabel: 'M. Chat',
-  tabBarIcon: ({focused}) => (
-    <TabBarIcon focused={focused} name="logo-octocat" />
-  )
-};
-
-CatStack.path = 'cat';
-
-const TaskStack = createStackNavigator(
-  {
-    Cat: TaskScreen
-  },
-  config);
+const TaskStack = (() => {
+  const Stack = createStackNavigator();
+  return () => (
+    <Stack.Navigator
+        initialRouteName="tasks"
+        headerMode="screen">
+      <Stack.Screen name="tasks" component={TaskScreen} />
+    </Stack.Navigator>
+  );
+})();
 
 TaskStack.navigationOptions = {
   tabBarLabel: 'Todos',
@@ -88,30 +78,57 @@ TaskStack.navigationOptions = {
   )
 };
 
-TaskStack.path = 'tasks';
-
-const navigatorConfigs = {
-  olivier: {
+const navigators = [
+  ["olivier", [
     LeavingOfficeStack,
     TvStack,
     TaskStack,
     SettingsStack,
-  },
-  colombe: {
+  ]],
+  ["colombe", [
     TaskStack,
     TvStack,
     SettingsStack,
-  }
-};
+  ]]
+].reduce(
+  (acc, [key, entries]) => {
+    const Tab = createBottomTabNavigator();
+    const screenOptions = ({ route }) => ({
+      tabBarIcon: ({ focused, color, size }) => {
+        const element = entries.find(e => e.navigationOptions.tabBarLabel === route.name);
+        if (element) {
+          const renderIcon = element.navigationOptions.tabBarIcon;
+          return renderIcon({focused});
+        } else {
+          return null;
+        }
+  
+        // if (route.name === 'Home') {
+        //   iconName = focused
+        //     ? 'ios-information-circle'
+        //     : 'ios-information-circle-outline';
+        // } else if (route.name === 'Settings') {
+        //   iconName = focused ? 'ios-list-box' : 'ios-list';
+        // }
+  
+        // // You can return any component that you like here!
+        // return <Ionicons name={iconName} size={size} color={color} />;
+      },
+    });
+    const Navigator = () => (
+      <Tab.Navigator screenOptions={screenOptions}>
+        {entries.map(e => {
+          const name = e.navigationOptions.tabBarLabel;
+          return <Tab.Screen key={name} name={name} component={e} />;
+        })}
+      </Tab.Navigator>
+    );
 
-const navigators = {};
-for (const key in navigatorConfigs) {
-  const navigator = createBottomTabNavigator(navigatorConfigs[key]);
-  navigator.path = '';
-  navigators[key] = navigator;
-}
+    return acc.set(key, Navigator);
+  }, 
+  new Map());
 
-export default navigators.colombe;
+export default navigators.get("colombe");
 export {
   navigators
 }
