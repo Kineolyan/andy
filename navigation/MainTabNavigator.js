@@ -79,12 +79,16 @@ TaskStack.navigationOptions = {
   )
 };
 
-
-const MealStack = createStackNavigator(
-  {
-    Cat: MealScreen
-  },
-  config);
+const MealStack = (() => {
+  const Stack = createStackNavigator();
+  return () => (
+    <Stack.Navigator
+        initialRouteName="meals"
+        headerMode="screen">
+      <Stack.Screen name="meals" component={MealScreen} />
+    </Stack.Navigator>
+  );
+})();
 
 MealStack.navigationOptions = {
   tabBarLabel: 'Repas',
@@ -93,18 +97,18 @@ MealStack.navigationOptions = {
   )
 };
 
-MealStack.path = 'meals';
-
 const navigators = [
   ["olivier", [
     LeavingOfficeStack,
     TvStack,
     TaskStack,
+    MealStack,
     SettingsStack,
   ]],
   ["colombe", [
     TaskStack,
     TvStack,
+    MealStack,
     SettingsStack,
   ]]
 ].reduce(
