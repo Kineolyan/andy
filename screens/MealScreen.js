@@ -15,52 +15,15 @@ import * as mealApi from '../apis/meals';
 async function listMeals(setMeals, markLoading) {
   markLoading(true);
 	// const tasks = await taskApi.readTasks();
-	const meals = [
-		{
-				"id": 0,
-				"name": "Pommes de terre gratinées",
-				"cookedTimes": 1,
-				"source": "Marabout 442"
-		},
-		{
-				"id": 1,
-				"name": "Menu d'été #1",
-				"cookedTimes": 1,
-				"source": "Batch cooking"
-		},
-		{
-				"id": 2,
-				"name": "Menu d'automne #2",
-				"cookedTimes": 1,
-				"source": "Batch cooking"
-		},
-		{
-				"id": 3,
-				"name": "Menu d'hiver #1",
-				"cookedTimes": 1,
-				"source": "Batch cooking"
-		},
-		{
-				"id": 4,
-				"name": "Menu d'hiver #2",
-				"cookedTimes": 1,
-				"comments": "Pas la salade de chou rouge",
-				"source": "Batch cooking"
-		},
-		{
-				"id": 5,
-				"name": "Winterpot",
-				"cookedTimes": 2
-		},
-		{
-				"id": 6,
-				"name": "Automne #12",
-				"cookedTimes": 1,
-				"source": "Pinterest"
-		}
-	];
-  setMeals(meals);
-  markLoading(false);
+	mealApi.readMeals().then(
+    meals => {
+      setMeals(meals);
+      markLoading(false);
+    },
+    err => {
+      setMeals(null);
+      markLoading(false);
+    });
 }
 
 async function executeTask(task, setMeals, markLoading) {
