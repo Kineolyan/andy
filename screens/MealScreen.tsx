@@ -11,6 +11,7 @@ import {
 } from 'react-native';
 
 import * as mealApi from '../apis/meals';
+import type {Meal} from '../apis/meals';
 
 async function listMeals(setMeals, markLoading) {
   markLoading(true);
@@ -26,18 +27,12 @@ async function listMeals(setMeals, markLoading) {
     });
 }
 
-async function executeTask(task, setMeals, markLoading) {
-  markLoading(true);
-  // await taskApi.executeTask(task);
-  return listMeals(setMeals, markLoading);
-}
-
-function getLastDate(time) {
+function getLastDate(time: number): string {
   const date = new Date(time);
   return `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
 }
 
-function MealInfo({meal: {cookedTimes, lastTimestamp}}) {
+function MealInfo({meal: {data: {count: cookedTimes, lastTime: lastTimestamp}}}: {meal: Meal}) {
 	if (cookedTimes) {
 		const last = lastTimestamp
 			? ` (dernière fois le ${getLastDate(lastTimestamp)})`
@@ -47,17 +42,19 @@ function MealInfo({meal: {cookedTimes, lastTimestamp}}) {
 				Plat cuisiné {cookedTimes} fois{last}
 			</Text>
 		);
-	}
+	} else {
+    return null;
+  }
 }
 
-function MealView({meal, markDone}) {
+function MealView({meal, markDone}: {meal: Meal, markDone: any}) {
   return (
-    <View key={meal.name}>
+    <View key={meal.id}>
       <TouchableOpacity
           style={styles.good}
           onPress={() => markDone(meal)}>
         <Text style={styles.content}>
-          {meal.name}
+          {meal.data.name}
         </Text>
       </TouchableOpacity>
 			<MealInfo meal={meal} />
@@ -66,7 +63,7 @@ function MealView({meal, markDone}) {
 }
 
 export default function MealScreen() {
-  const [meals, setMeals] = useState(null);
+  const [meals, setMeals] = useState<Meal[] | null>(null);
   const [loading, markLoading] = useState(false);
 
   let content;
@@ -77,7 +74,7 @@ export default function MealScreen() {
   } else if (meals.length === 0) {
     content = <Text>Oops. Aucune idée de repas :)</Text>;
   } else {
-    const markDone = task => {};
+    const markDone = () => {};
     const entries = meals.map(meal => MealView({meal, markDone}));
     content = (
       <ScrollView

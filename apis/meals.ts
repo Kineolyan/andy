@@ -1,4 +1,16 @@
-const readMeals = () => Promise.resolve([
+export interface Meal {
+  id: string,
+  data: {
+    name: string,
+    count: number,
+    lastTime: number,
+    source: string,
+    rating: number,
+    comments?: string
+  }
+}
+
+const readMeals = (): Promise<Meal[]> => Promise.resolve([
   {
       id: "this-is-id-1",
       data: {
