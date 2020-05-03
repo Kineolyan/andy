@@ -9,6 +9,7 @@ import LeavingScreen from '../screens/LeavingScreen';
 import TvScreen from '../screens/TvScreen';
 import TaskScreen from '../screens/TaskScreen';
 import MealScreen from '../screens/MealScreen';
+import MealInfoScreen from '../screens/MealInfoScreen';
 
 // FIXME how to use this
 const config = Platform.select({
@@ -86,6 +87,7 @@ const MealStack = (() => {
         initialRouteName="meals"
         headerMode="screen">
       <Stack.Screen name="meals" component={MealScreen} />
+      <Stack.Screen name="one-meal" component={MealInfoScreen} />
     </Stack.Navigator>
   );
 })();
