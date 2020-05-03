@@ -74,7 +74,7 @@ export default function MealScreen({navigation}) {
   } else if (meals.length === 0) {
     content = <Text>Oops. Aucune idée de repas :)</Text>;
   } else {
-    const markDone = () => navigation.navigate('one-meal');
+    const markDone = (meal: Meal) => navigation.navigate('one-meal', {meal});
     const entries = meals.map(meal => MealView({meal, markDone}));
     content = (
       <ScrollView
