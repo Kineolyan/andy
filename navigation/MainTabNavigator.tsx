@@ -50,7 +50,10 @@ const TvStack = (() => {
   return () => (
     <Stack.Navigator initialRouteName="tv"
         headerMode="screen">
-      <Stack.Screen name="tv" component={TvScreen} />
+      <Stack.Screen 
+        name="tv" 
+        component={TvScreen} 
+        options={{title: TvScreen.navigationOptions.title}}/>
     </Stack.Navigator>
   );
 })();
@@ -68,7 +71,10 @@ const TaskStack = (() => {
     <Stack.Navigator
         initialRouteName="tasks"
         headerMode="screen">
-      <Stack.Screen name="tasks" component={TaskScreen} />
+      <Stack.Screen 
+        name="tasks" 
+        component={TaskScreen} 
+        options={{title: TaskScreen.navigationOptions.title}}/>
     </Stack.Navigator>
   );
 })();
@@ -82,12 +88,20 @@ TaskStack.navigationOptions = {
 
 const MealStack = (() => {
   const Stack = createStackNavigator();
+  const shortenTitle = (name: string): string => 
+    name.length > 20 ? `${name.substring(0, 20)}...` : name;
   return () => (
     <Stack.Navigator
         initialRouteName="meals"
         headerMode="screen">
-      <Stack.Screen name="meals" component={MealScreen} />
-      <Stack.Screen name="one-meal" component={MealInfoScreen} />
+      <Stack.Screen 
+        name="meals" 
+        component={MealScreen} 
+        options={{title: MealScreen.navigationOptions.title}}/>
+      <Stack.Screen 
+        name="one-meal" 
+        component={MealInfoScreen} 
+        options={({route}) => ({title: shortenTitle(route.params.meal.data.name)})}/>
     </Stack.Navigator>
   );
 })();
