@@ -34,6 +34,12 @@ const readMeals = (): Promise<Meal[]> => Promise.resolve([
   }
 ]);
 
+const markAsCooked = (meal: Meal): Promise<Meal> => {
+  return new Promise(resolve => setTimeout(resolve, 1000))
+    .then(() => meal);
+}
+
 export {
-  readMeals
+  readMeals,
+  markAsCooked
 };

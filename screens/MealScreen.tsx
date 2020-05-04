@@ -12,6 +12,7 @@ import {
 
 import * as mealApi from '../apis/meals';
 import type {Meal} from '../apis/meals';
+import { set } from '../services/profile';
 
 async function listMeals(setMeals, markLoading) {
   markLoading(true);
@@ -47,20 +48,45 @@ function MealInfo({meal: {data: {count: cookedTimes, lastTime: lastTimestamp}}}:
   }
 }
 
-function MealView({meal, markDone}: {meal: Meal, markDone: any}) {
+function MealView({meal, markDone, seeDetails}: {meal: Meal, markDone: any, seeDetails: any}) {
   return (
     <View key={meal.id}>
+    <TouchableOpacity
+        style={styles.editButton}
+        onPress={() => seeDetails(meal)}>
+      <Text>
+        {meal.data.name}
+      </Text>
+    </TouchableOpacity>
       <TouchableOpacity
-          style={styles.good}
+          style={styles.cookedButton}
           onPress={() => markDone(meal)}>
-        <Text style={styles.content}>
-          {meal.data.name}
+        <Text>
+          Cuisiné
         </Text>
       </TouchableOpacity>
 			<MealInfo meal={meal} />
     </View>
   );
 }
+
+const markAsDone = async (
+    meal: Meal, 
+    setMeals: any,
+    markLoading: any) => {
+  markLoading(true);
+  try {
+    const updatedMeal = await mealApi.markAsCooked(meal);
+    setMeals((meals: Meal[]) => {
+      const idx = meals.findIndex(m => m.id === updatedMeal.id);
+      const reMeals = [...meals];
+      reMeals[idx] = updatedMeal;
+      return reMeals;
+    });
+  } finally {
+    markLoading(false);
+  }
+};
 
 export default function MealScreen({navigation}) {
   const [meals, setMeals] = useState<Meal[] | null>(null);
@@ -74,8 +100,9 @@ export default function MealScreen({navigation}) {
   } else if (meals.length === 0) {
     content = <Text>Oops. Aucune idée de repas :)</Text>;
   } else {
-    const markDone = (meal: Meal) => navigation.navigate('one-meal', {meal});
-    const entries = meals.map(meal => MealView({meal, markDone}));
+    const seeDetails = (meal: Meal) => navigation.navigate('one-meal', {meal});
+    const markDone = (meal: Meal) => markAsDone(meal, setMeals, markLoading);
+    const entries = meals.map(meal => MealView({meal, markDone, seeDetails}));
     content = (
       <ScrollView
         style={styles.container}
@@ -101,10 +128,6 @@ MealScreen.navigationOptions = {
   title: 'Il est midi douze :P',
 };
 
-const baseButtonStyle = {
-  alignItems: 'center',
-  padding: 10
-};
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#fff',
@@ -136,9 +159,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fbfbfb',
     paddingVertical: 10,
   },
-  good: {
-    ...baseButtonStyle,
-    backgroundColor: '#a2fc99',
+  editButton: {
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#fce9a9',
+  },
+  cookedButton: {
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#76d6fc',
   },
   details: {
     fontWeight: '600',
