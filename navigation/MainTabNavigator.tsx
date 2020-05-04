@@ -10,6 +10,7 @@ import TvScreen from '../screens/TvScreen';
 import TaskScreen from '../screens/TaskScreen';
 import MealScreen from '../screens/MealScreen';
 import MealInfoScreen from '../screens/MealInfoScreen';
+import MealEditor from '../screens/MealEditor';
 
 // FIXME how to use this
 const config = Platform.select({
@@ -90,6 +91,7 @@ const MealStack = (() => {
   const Stack = createStackNavigator();
   const shortenTitle = (name: string): string => 
     name.length > 20 ? `${name.substring(0, 20)}...` : name;
+
   return () => (
     <Stack.Navigator
         initialRouteName="meals"
@@ -101,7 +103,13 @@ const MealStack = (() => {
       <Stack.Screen 
         name="one-meal" 
         component={MealInfoScreen} 
-        options={({route}) => ({title: shortenTitle(route.params.meal.data.name)})}/>
+        options={({route}) => ({
+          title: shortenTitle(route.params.meal.data.name)
+        })}/>
+      <Stack.Screen 
+        name="edit" 
+        component={MealEditor} 
+        options={{title: 'Edit'}}/>
     </Stack.Navigator>
   );
 })();

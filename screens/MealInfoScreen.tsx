@@ -10,8 +10,25 @@ import {
 import * as mealApi from '../apis/meals';
 import type {Meal} from '../apis/meals';
 
+function EditButton({meal, navigation}) {
+  return (
+    <Button
+      onPress={() => navigation.navigate('edit', {meal})}
+      title="Edit"
+      color="#fff"
+    />
+  );
+}
+
 export default function MealInfoScreen({route, navigation}) {
   const meal: Meal = route.params.meal; 
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => EditButton({meal, navigation}),
+    });
+  }, [navigation, meal]);
+
   return (
     <View style={styles.container}>
       <Text>{meal.data.name}</Text>
@@ -22,6 +39,9 @@ export default function MealInfoScreen({route, navigation}) {
       <Button 
         onPress={() => navigation.goBack()}
         title={"Marqué comme cuisiné"} />
+      <Button 
+        onPress={() => navigation.navigate('edit', {meal})}
+        title={"Editer"} />
     </View>
   );
 }
