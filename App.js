@@ -1,4 +1,4 @@
-import { AppLoading } from 'expo';
+import AppLoading from 'expo-app-loading';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState, useEffect } from 'react';
@@ -6,7 +6,7 @@ import { Platform, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import createAppNavigator from './navigation/AppNavigator';
-import {initHook as initProfile} from './services/profile';
+import { initHook as initProfile } from './services/profile';
 
 const appsPerProfile = new Map();
 const NoApp = () => {
