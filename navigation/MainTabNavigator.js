@@ -8,6 +8,7 @@ import SettingsScreen from '../screens/SettingsScreen';
 import LeavingScreen from '../screens/LeavingScreen';
 import TvScreen from '../screens/TvScreen';
 import TaskScreen from '../screens/TaskScreen';
+import DailyScreen from '../screens/DailyScreen';
 
 // FIXME how to use this
 const config = Platform.select({
@@ -20,8 +21,8 @@ const SettingsStack = (() => {
 
   return () => (
     <Stack.Navigator
-        initialRouteName="settings"
-        headerMode="screen">
+      initialRouteName="settings"
+      headerMode="screen">
       <Stack.Screen name="settings" component={SettingsScreen} />
     </Stack.Navigator>
   );
@@ -37,7 +38,7 @@ SettingsStack.navigationOptions = {
 const LeavingOfficeStack = () => <LeavingScreen />;
 LeavingOfficeStack.navigationOptions = {
   tabBarLabel: 'Leaving',
-  tabBarIcon: ({focused}) => (
+  tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.IO === 'ios' ? 'ios-train' : 'md-train'} />
   )
 };
@@ -47,7 +48,7 @@ const TvStack = (() => {
 
   return () => (
     <Stack.Navigator initialRouteName="tv"
-        headerMode="screen">
+      headerMode="screen">
       <Stack.Screen name="tv" component={TvScreen} />
     </Stack.Navigator>
   );
@@ -55,7 +56,7 @@ const TvStack = (() => {
 
 TvStack.navigationOptions = {
   tabBarLabel: 'TV Shows',
-  tabBarIcon: ({focused}) => (
+  tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.IO === 'ios' ? 'ios-tv' : 'md-tv'} />
   )
 };
@@ -64,8 +65,8 @@ const TaskStack = (() => {
   const Stack = createStackNavigator();
   return () => (
     <Stack.Navigator
-        initialRouteName="tasks"
-        headerMode="screen">
+      initialRouteName="tasks"
+      headerMode="screen">
       <Stack.Screen name="tasks" component={TaskScreen} />
     </Stack.Navigator>
   );
@@ -73,13 +74,32 @@ const TaskStack = (() => {
 
 TaskStack.navigationOptions = {
   tabBarLabel: 'Todos',
-  tabBarIcon: ({focused}) => (
+  tabBarIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name="ios-apps" />
+  )
+};
+
+const DailyStack = (() => {
+  const Stack = createStackNavigator();
+  return () => (
+    <Stack.Navigator
+      initialRouteName="daily"
+      headerMode="screen">
+      <Stack.Screen name="daily" component={DailyScreen} />
+    </Stack.Navigator>
+  );
+})();
+
+DailyStack.navigationOptions = {
+  tabBarLabel: 'Daily',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name="md-checkmark-done" />
   )
 };
 
 const navigators = [
   ["olivier", [
+    DailyStack,
     LeavingOfficeStack,
     TvStack,
     TaskStack,
@@ -87,6 +107,7 @@ const navigators = [
   ]],
   ["colombe", [
     TaskStack,
+    DailyStack,
     TvStack,
     SettingsStack,
   ]]
@@ -98,11 +119,11 @@ const navigators = [
         const element = entries.find(e => e.navigationOptions.tabBarLabel === route.name);
         if (element) {
           const renderIcon = element.navigationOptions.tabBarIcon;
-          return renderIcon({focused});
+          return renderIcon({ focused });
         } else {
           return null;
         }
-  
+
         // if (route.name === 'Home') {
         //   iconName = focused
         //     ? 'ios-information-circle'
@@ -110,7 +131,7 @@ const navigators = [
         // } else if (route.name === 'Settings') {
         //   iconName = focused ? 'ios-list-box' : 'ios-list';
         // }
-  
+
         // // You can return any component that you like here!
         // return <Ionicons name={iconName} size={size} color={color} />;
       },
@@ -125,7 +146,7 @@ const navigators = [
     );
 
     return acc.set(key, Navigator);
-  }, 
+  },
   new Map());
 
 export default navigators.get("colombe");

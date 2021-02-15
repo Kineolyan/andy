@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   Button,
   Platform,
@@ -24,7 +24,7 @@ async function executeTask(task, setTask, markLoading) {
   return listTasks(setTask, markLoading);
 }
 
-function getButtonStyle({daysToTarget}) {
+function getButtonStyle({ daysToTarget }) {
   if (daysToTarget > 1) {
     return styles.good;
   } else if (daysToTarget >= 0) {
@@ -36,28 +36,28 @@ function getButtonStyle({daysToTarget}) {
   }
 }
 
-function getDueDate({dueDate}) {
+function getDueDate({ dueDate }) {
   const d = new Date(dueDate);
   return `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
 }
 
 function getHumanUnit(unit) {
   switch (unit) {
-  case 'd': return 'jours';
-  case 'w': return 'semaines';
-  case 'm': return 'mois';
-  case 'y': return 'ans';
-  default: return unit;
+    case 'd': return 'jours';
+    case 'w': return 'semaines';
+    case 'm': return 'mois';
+    case 'y': return 'ans';
+    default: return unit;
   }
 }
 
-function getFrequency({frequency}) {
-  const {duration, unit} = taskApi.parseFrequency(frequency);
+function getFrequency({ frequency }) {
+  const { duration, unit } = taskApi.parseFrequency(frequency);
   const hUnit = getHumanUnit(unit);
   return `Tous les ${duration} ${hUnit}`;
 }
 
-function TaskView({task, markDone}) {
+function TaskView({ task, markDone }) {
   const buttonStyle = getButtonStyle(task);
   const beforeText = task.daysToTarget >= 0
     ? `${task.daysToTarget} jours restant`
@@ -66,8 +66,8 @@ function TaskView({task, markDone}) {
   return (
     <View key={task.name}>
       <TouchableOpacity
-          style={buttonStyle}
-          onPress={() => markDone(task)}>
+        style={buttonStyle}
+        onPress={() => markDone(task)}>
         <Text style={styles.content}>
           {task.name}
         </Text>
@@ -91,7 +91,7 @@ export default function TaskScreen() {
     content = <Text>Rien à faire. Bravo :)</Text>;
   } else {
     const markDone = task => executeTask(task, setTasks, markLoading);
-    const entries = tasks.map(task => TaskView({task, markDone}));
+    const entries = tasks.map(task => TaskView({ task, markDone }));
     content = (
       <ScrollView
         style={styles.container}
